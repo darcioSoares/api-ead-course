@@ -9,5 +9,14 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nome', 'description', 'image'];
-}
+    protected $fillable = ['name', 'description', 'image'];
+
+
+    public function modules()
+    {
+        return $this->hasMany(Module::class);
+    }
+
+
+
+}//end class
