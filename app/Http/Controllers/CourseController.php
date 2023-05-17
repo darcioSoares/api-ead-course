@@ -14,4 +14,12 @@ class CourseController extends Controller
 
         return CouserResource::collection($coursers);
     }
+
+    public function store($id)
+    {
+        $coursers = Course::findOrFail($id);
+
+        return new CouserResource($coursers);
+    }
+
 }
