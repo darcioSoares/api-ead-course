@@ -13,7 +13,7 @@ class ReplySupport extends Model
     protected $fillable = ['description', 'support_id','user_id'];
 
     //eu passo um metodo de relacionamento / sera alterando o timestamp referente a esse relacionamento
-    // protected $touches = ['support'];
+    protected $touches = ['support'];
 
     public function support()
     {
