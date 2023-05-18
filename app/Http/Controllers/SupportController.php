@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\StoreSupport;
 use App\Models\Support;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -34,6 +36,19 @@ class SupportController extends Controller
         
         return SupportResource::collection($supports);
 
+    }
+
+    public function store(StoreSupport $request)
+    {
+        $support = $this->getUserAuth() 
+                    ->supports()
+                    ->create([
+                        'lesson_id' => $request->validated()['lesson'],
+                        'description' => $request->validated()['description'],
+                        'status' => $request->validated()['status']
+                    ]);        
+
+        return SupportResource::make($support);
     }
 
     private function getUserAuth(): User

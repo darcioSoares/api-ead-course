@@ -9,7 +9,7 @@ class Support extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['status', 'description'];
+    protected $fillable = ['status', 'description','lesson_id'];
 
     public $statusOptions = [
         'P' => 'Pendente, Aguardando Professor',
