@@ -19,11 +19,11 @@ class SupportController extends Controller
         return User::first();
     }
 
-    public function index(Request $request)
+    //suports do ususario expecifico logado
+    public function mySupports(Request $request)
     {
-        //A query esta dinamica, dependendo dos parametros da requisição, a query sera realizada.
         $filters = $request->all();
-
+        
         $supports = $this->getUserAuth()
                 ->supports()
                 ->where(function($query) use($filters){
@@ -40,6 +40,39 @@ class SupportController extends Controller
                         $filter = $filters['filter'];
                         $query->where('description','LIKE', "%{$filters}%");
                     }
+                    if(isset($filters['user']))
+                    {
+                        $user = $this->getUserAuth();
+                        $query->where('status', $user->id );
+                    }
+                })
+                ->orderBy('updated_at')
+                ->get();                
+        
+        return SupportResource::collection($supports);
+    }
+
+    public function index(Request $request, Support $support)
+    {
+        //A query esta dinamica, dependendo dos parametros da requisição, a query sera realizada.
+        $filters = $request->all();
+
+        // $support = new Support();
+        $supports = $support           
+                    ->where(function($query) use($filters){
+                        if(isset($filters['lesson']))
+                        {
+                            $query->where('lesson_id', $filters['lesson']);
+                        }
+                        if(isset($filters['status']))
+                        {
+                            $query->where('status', $filters['status']);
+                        }
+                        if(isset($filters['filter']))
+                        {
+                            $filter = $filters['filter'];
+                            $query->where('description','LIKE', "%{$filters}%");
+                        }
                 })
                 ->orderBy('updated_at')
                 ->get();                
@@ -62,32 +95,32 @@ class SupportController extends Controller
     }
 
     //StoreReplySupport
-    public function createReply(Request $request, string $id, Support $support)
+    public function createReply(Request $request, Support $support)
     {
         
         $user = $this->getUserAuth();
         
-        if(isset($request->description))
+        // O StoreReplySupport não esta respondendo como deveria, metodo provisorio de validação
+        if(isset($request->description) && isset($request->support_id))
         {
-            $reply = $support->findOrFail($id) 
+            $reply = $support->findOrFail($request->support_id) 
                         ->replies()
-                        ->create([                        
+                        ->create([    
+                            'support_id' => $request->support_id,                   
                             'description' => $request->description,
                             'user_id' => $user->id
-                        ]); 
-                            
+                        ]);                             
                 
             return ReplySupportResource::make($reply);
 
         }else{
-
             return response()->json([
-                'name' => 'Abigail',
-                'state' => 'CA',
-            ]);
+                'description' => 'Obrigatorio',
+                'support' => 'Obrigatorio',
+            ],404);
         }
         
-    }
+    }//end method
 
 
 

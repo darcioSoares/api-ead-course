@@ -27,5 +27,7 @@ class StoreReplySupport extends FormRequest
             // 'description' => [ Rule::in($this->description),'min:3']
             // 'support' => ['required', 'exists:supports,id']
         ];
+        //observação
+        //'support_id' => ['required', 'exists:reply_support,support_id'],
     }
 }
