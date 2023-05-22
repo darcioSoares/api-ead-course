@@ -15,8 +15,10 @@ class SupportController extends Controller
 
     private function getUserAuth(): User
     {
-        //return auth()->user();
-        return User::first();
+        return auth()->user();
+
+        //para teste
+        //return User::first();
     }
 
     //suports do ususario expecifico logado
