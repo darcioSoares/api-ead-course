@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -42,6 +44,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Estou sobrescrevendo um metodo existente 
+     * Para personalizar 
+     */  
+    public function sendPasswordResetNotification($token)
+    {
+        //criei um notification para tratar e estou chamando e passando o toker
+        $this->notify(new ResetPasswordNotification($token));
+    }
 
 
     public function supports()
